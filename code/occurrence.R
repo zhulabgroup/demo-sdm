@@ -54,6 +54,18 @@ get_occ_data <- function(sp, path_land = "data/mask/", deg = 0.5) {
     df_raw$data$decimalLatitude %>% max() + df_raw$data$decimalLatitude %>% range() %>% diff() %>% `/`(2)
   )
 
+  # write to txt
+  write.table(
+    data.frame(
+      xmin = local_extent[1],
+      xmax = local_extent[2],
+      ymin = local_extent[3],
+      ymax = local_extent[4]
+    ),
+    str_c("inputs/", sp, "/area_extent.txt"),
+    col.names = FALSE, row.names = FALSE, sep = ","
+  )
+
   # Clip land mask to study area
   land_raster <- terra::crop(land_raster, local_extent)
   terra::writeRaster(land_raster,

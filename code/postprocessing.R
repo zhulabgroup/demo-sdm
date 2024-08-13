@@ -23,7 +23,7 @@ clip_to_area <- function(path_in,
   }
 }
 
-plot_maps <- function(path = "outputs/pd/present/xgb-images/") {
+plot_maps <- function(path) {
   files <- list.files(path, full.names = T, pattern = ".tif", recursive = T)
   for (file in files) {
     ras <- terra::rast(file)
@@ -31,7 +31,7 @@ plot_maps <- function(path = "outputs/pd/present/xgb-images/") {
     p <- ras %>%
       as.data.frame(xy = T) %>%
       ggplot() +
-      geom_tile(aes(x = x, y = y, fill = !!sym(var_name))) +
+      geom_tile(aes(x = x, y = y, fill = !!sym(names(ras)))) +
       scale_fill_gradient(
         low = "white",
         high = "darkgreen",
@@ -54,7 +54,7 @@ plot_maps <- function(path = "outputs/pd/present/xgb-images/") {
 
 for (sp in c("pd", "zp")) {
   for (period in c("present", "future1", "future2")) {
-    for (model in c("xgb", "lgbm")) {
+    for (model in c("rf", "et", "xgb", "lgbm", "logreg", "mlp")) {
       clip_to_area(
         path_in = str_c("outputs/", sp, "/", period, "/", model, "-images/"),
         path_area = str_c("inputs/", sp, "/"),
@@ -63,5 +63,41 @@ for (sp in c("pd", "zp")) {
 
       plot_maps(path = str_c("outputs/", sp, "/", period, "/", model, "-images/"))
     }
+  }
+}
+
+average_decision_tree <- function(path_in,
+                                  path_out) {
+  dir.create(path_out, showWarnings = F, recursive = T)
+  files <- list.files(path_in, full.names = T, pattern = "probability_1.*.tif", recursive = T)
+  files <- files[str_detect(files, "rf-|et-|xgb-|lgbm-")]
+
+  # average all rasters
+  ras_list <- terra::rast(files)
+  ras_mean <- terra::mean(ras_list, na.rm = T)
+  terra::writeRaster(ras_mean,
+    file.path(path_out, "probability_mean.tif"),
+    overwrite = TRUE
+  )
+
+  ras_stdev <- terra::stdev(ras_list, na.rm = T)
+  terra::writeRaster(ras_stdev,
+    file.path(path_out, "probability_stdev.tif"),
+    overwrite = TRUE
+  )
+}
+
+for (sp in c("pd", "zp")) {
+  for (period in c("present", "future1", "future2")) {
+    average_decision_tree(
+      path_in = str_c("outputs/", sp, "/", period, "/"),
+      path_out = str_c("outputs/", sp, "/", period, "/average/")
+    )
+  }
+}
+
+for (sp in c("pd", "zp")) {
+  for (period in c("present", "future1", "future2")) {
+    plot_maps(path = str_c("outputs/", sp, "/", period, "/average/"))
   }
 }

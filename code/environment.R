@@ -1,5 +1,20 @@
 library(tidyverse)
 
+read_elevation <- function(path = "data/elevation/") {
+  # https://www.temis.nl/data/gmted2010/index.php
+  dir.create(str_c(path, "tif/"), showWarnings = F, recursive = T)
+
+  # read in hdf
+  file <- list.files(path = path, pattern = ".nc$", full.names = TRUE)
+  ras <- terra::rast(file)
+  terra::writeRaster(ras$elevation,
+    filename = str_c(path, "tif/elevation.tif"),
+    overwrite = T
+  )
+}
+
+read_elevation()
+
 resample_raster <- function(path_in,
                             path_out,
                             deg = 0.5) {
@@ -15,7 +30,6 @@ resample_raster <- function(path_in,
   for (file in files) {
     ras <- terra::rast(file)
     ras_re <- terra::resample(ras, grid_raster, method = "near")
-    # ras_re[is.na(ras_re)] <- 0
     terra::writeRaster(ras_re,
       file.path(path_out, basename(file)),
       overwrite = TRUE
@@ -45,6 +59,10 @@ resample_raster(
   path_out = "data/cover/resample/"
 )
 
+resample_raster(
+  path_in = "data/elevation/tif/",
+  path_out = "data/elevation/resample/"
+)
 
 average_model <- function(path_in,
                           path_out) {

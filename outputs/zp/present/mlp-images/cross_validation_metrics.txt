@@ -1,0 +1,1 @@
+mlp 5-fold Cross Validation Accuracy: 80.25 (+/- 4.03)
