@@ -1,6 +1,1 @@
-xgb 5-fold Cross Validation Accuracy: 89.21 (+/- 3.84)
-xgb 5-fold Cross Validation Accuracy: 86.75 (+/- 5.39)
-xgb 5-fold Cross Validation Accuracy: 86.75 (+/- 5.39)
-xgb 5-fold Cross Validation Accuracy: 86.36 (+/- 4.67)
-xgb 5-fold Cross Validation Accuracy: 86.36 (+/- 4.67)
 xgb 5-fold Cross Validation Accuracy: 86.15 (+/- 3.89)

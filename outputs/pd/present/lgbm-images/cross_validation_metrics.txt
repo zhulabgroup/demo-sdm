@@ -1,6 +1,1 @@
-lgbm 5-fold Cross Validation Accuracy: 88.38 (+/- 4.52)
-lgbm 5-fold Cross Validation Accuracy: 86.02 (+/- 5.14)
-lgbm 5-fold Cross Validation Accuracy: 86.02 (+/- 5.14)
-lgbm 5-fold Cross Validation Accuracy: 86.29 (+/- 4.30)
-lgbm 5-fold Cross Validation Accuracy: 86.29 (+/- 4.30)
 lgbm 5-fold Cross Validation Accuracy: 87.50 (+/- 3.59)

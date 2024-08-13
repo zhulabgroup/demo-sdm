@@ -52,7 +52,7 @@ def run_model(sp, future=False):
         
         # Save cross-validation metrics
         os.makedirs(f"outputs/{sp}/present/{name}-images", exist_ok=True)
-        with open(f"outputs/{sp}/present/{name}-images/cross_validation_metrics.txt", 'a') as file:
+        with open(f"outputs/{sp}/present/{name}-images/cross_validation_metrics.txt", 'w') as file:
             file.write(f"{name} {kf.get_n_splits()}-fold Cross Validation Accuracy: {accuracy_scores.mean() * 100:.2f} (+/- {accuracy_scores.std() * 100:.2f})\n")
         
         # Fit model and predict
